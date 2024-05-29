@@ -1,4 +1,13 @@
+using CourseReviewWeb.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using CourseReviewWeb.Data;
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("CourseReviewWebDbContextConnection") ?? throw new InvalidOperationException("Connection string 'CourseReviewWebDbContextConnection' not found.");
+
+builder.Services.AddDbContext<CourseReviewWebDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<CourseReviewWebDbContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
